@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../../axios';
 import Post from '../../components/Post/Post';
 import FullPost from '../../components/FullPost/FullPost';
 import NewPost from '../../components/NewPost/NewPost';
@@ -10,12 +11,13 @@ class Blog extends Component {
     // Make Posts an Empty Array
     posts: [],
     // Store Selected Post Id
-    selectedPostId: null
+    selectedPostId: null,
+    error: false
   };
 
   componentDidMount() {
     // Fetch data, set the state with the response
-    axios.get('https://jsonplaceholder.typicode.com/posts')
+    axios.get('/posts')
       .then(response => {
         //Transform the gotten data
         const posts = response.data.slice(0, 4);
@@ -30,8 +32,11 @@ class Blog extends Component {
         });
         // Setstate to the Transformed Posts
         this.setState({posts: updatedPosts});
-        // console.log(response);
-      })
+        // Catch an Error if wrong URL given
+      }).catch(error => {
+        console.log(error);
+      this.setState({error: true})
+    })
   }
 
   postSelectedHandler = (id) => {
@@ -39,16 +44,19 @@ class Blog extends Component {
   };
 
   render() {
+    let posts = <p style={{textAlign: 'center'}}>Something went Wrong</p>;
     // Put the fetched posts into a Post constant
-    const posts = this.state.posts.map(post => {
-        // Assign the post title from the fetched array to the component props
-        return <Post
-          key={post.id}
-          title={post.title}
-          author={post.author}
-          clicked={() => this.postSelectedHandler(post.id)}/>
-      }
-    );
+    if (!this.state.error) {
+       posts = this.state.posts.map(post => {
+          // Assign the post title from the fetched array to the component props
+          return <Post
+            key={post.id}
+            title={post.title}
+            author={post.author}
+            clicked={() => this.postSelectedHandler(post.id)}/>
+        }
+      );
+    }
     return (
       <div>
         <section className="Posts">
