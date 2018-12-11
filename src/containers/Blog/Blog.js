@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
 import Post from '../../components/Post/Post';
 import FullPost from '../../components/FullPost/FullPost';
@@ -7,7 +7,10 @@ import './Blog.css';
 
 class Blog extends Component {
   state = {
-    posts: []
+    // Make Posts an Empty Array
+    posts: [],
+    // Store Selected Post Id
+    selectedPostId: null
   };
 
   componentDidMount() {
@@ -15,7 +18,7 @@ class Blog extends Component {
     axios.get('https://jsonplaceholder.typicode.com/posts')
       .then(response => {
         //Transform the gotten data
-        const posts = response.data.slice(0,4);
+        const posts = response.data.slice(0, 4);
         // For each post, return a JavaScript Object
         const updatedPosts = posts.map(post => {
           return {
@@ -31,31 +34,36 @@ class Blog extends Component {
       })
   }
 
-  render () {
+  postSelectedHandler = (id) => {
+    this.setState({selectedPostId: id})
+  };
+
+  render() {
     // Put the fetched posts into a Post constant
     const posts = this.state.posts.map(post => {
-      // Assign the post title from the fetched array to the component props
-      return <Post
-        key={post.id}
-        title={post.title}
-        author={post.author}/>
+        // Assign the post title from the fetched array to the component props
+        return <Post
+          key={post.id}
+          title={post.title}
+          author={post.author}
+          clicked={() => this.postSelectedHandler(post.id)}/>
       }
     );
-        return (
-            <div>
-                <section className="Posts">
-                  {/*Render the posts Dynamically*/}
-                  {posts}
-                </section>
-                <section>
-                    <FullPost />
-                </section>
-                <section>
-                    <NewPost />
-                </section>
-            </div>
-        );
-    }
+    return (
+      <div>
+        <section className="Posts">
+          {/*Render the posts Dynamically*/}
+          {posts}
+        </section>
+        <section>
+          <FullPost id={this.state.selectedPostId}/>
+        </section>
+        <section>
+          <NewPost/>
+        </section>
+      </div>
+    );
+  }
 }
 
 export default Blog;

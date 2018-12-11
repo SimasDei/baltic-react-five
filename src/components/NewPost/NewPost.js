@@ -6,8 +6,10 @@ class NewPost extends Component {
     state = {
         title: '',
         content: '',
-        author: 'Max'
+        author: 'Sai'
     };
+
+
 
     render () {
         return (
