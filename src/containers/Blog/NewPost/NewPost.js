@@ -10,13 +10,18 @@ class NewPost extends Component {
         author: 'Sai'
     };
 
-    postDataHandler = () => {
+    componentDidMount() {
+      console.log(this.props);
+    }
+
+  postDataHandler = () => {
     //  Data to send
       const data = {
         title: this.state.title,
         body: this.state.content,
         author: this.state.author,
       };
+
     //  use axios POST method
     axios.post('/posts', data).then(response => {
       console.log(response)

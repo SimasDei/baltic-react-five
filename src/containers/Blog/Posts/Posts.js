@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Post from "../../../components/Post/Post";
 import axios from "../../../axios";
+// import {Link} from "react-router-dom";
 import './Posts.css';
 
 class Posts extends Component {
@@ -17,6 +18,7 @@ class Posts extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props);
     // Fetch data, set the state with the response
     axios.get('/posts')
       .then(response => {
@@ -46,11 +48,15 @@ class Posts extends Component {
     if (!this.state.error) {
       posts = this.state.posts.map(post => {
           // Assign the post title from the fetched array to the component props
-          return <Post
-            key={post.id}
-            title={post.title}
-            author={post.author}
-            clicked={() => this.postSelectedHandler(post.id)}/>
+          return (
+            /*<Link to={'/posts/' + post.id} key={post.id}>*/
+              <Post
+                key={post.id}
+                title={post.title}
+                author={post.author}
+                clicked={() => this.postSelectedHandler(post.id)}/>
+            // </Link>
+          )
         }
       );
     }
